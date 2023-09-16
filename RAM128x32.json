@@ -1,0 +1,33 @@
+{
+    "info": {
+        "name": "RAM128x32",
+        "description": "",
+        "repo": "",
+        "owner": "",
+        "license": "Apache 2.0",
+        "author": "",
+        "email": "",
+        "version": "",
+        "date": "",
+        "category": "digital",
+        "tags": [
+            "peripheral",
+            "timer",
+            "counter",
+            "capture"
+        ],
+        "bus": [
+            "AHBL"
+        ],
+        "type": "hard",
+        "status": "",
+        "cell_count": "0",
+        "width": "552.580",
+        "height": "563.300",
+        "technology": "sky130",
+        "clock_freq_mhz": "40",
+        "supply_voltage": [
+            "n/a"
+        ]
+    }
+}
