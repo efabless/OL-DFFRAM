@@ -1,9 +1,9 @@
 {
     "info": {
-        "name": "RAM128x32",
-        "description": "",
+        "name": "DFFRAM256x32",
+        "description": "1kbyte (256x32) DFFRAM hardened using OpenLane",
         "repo": "",
-        "owner": "",
+        "owner": "AUCOHL",
         "license": "Apache 2.0",
         "author": "",
         "email": "",
@@ -11,10 +11,9 @@
         "date": "",
         "category": "digital",
         "tags": [
-            "peripheral",
-            "timer",
-            "counter",
-            "capture"
+            "SRAM",
+            "DFFRAM",
+            "memory"
         ],
         "bus": [
             "AHBL"

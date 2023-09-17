@@ -1,3 +1,22 @@
+/*
+ * RAM.v
+ *
+ * A configurable DFFRAM Netlist to be hardened by OpenLane
+ *
+ * This is free software: you can redistribute it and/or modify
+ * it under the terms of the Apache License, Version 2.0 (the "License").
+ *
+ * DFFRAM is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * Apache License, Version 2.0 for more details.
+ *
+ * You should have received a copy of the Apache License, Version 2.0
+ * along with DFFRAM. If not, see <https://www.apache.org/licenses/LICENSE-2.0>.
+ *
+ * For further information, please visit .
+ *
+ */
 `default_nettype        none
 
 module  CLKBUF_2  (input A, output X); 
@@ -19,10 +38,6 @@ endmodule
 
 module CONB (output HI, output LO); 
     sky130_fd_sc_hd__conb_1 __cell__ (.HI(), .LO(LO)); 
-endmodule
-
-module EBUFN_2 (input A, input TE_B, output Z); 
-    sky130_fd_sc_hd__ebufn_2 __cell__ ( .A(A), .TE_B(TE_B), .Z(Z));
 endmodule
 
 module EBUFN_4 (input A, input TE_B, output Z); 
@@ -257,72 +272,48 @@ module RAM16 #( parameter   USE_LATCH=1,
 endmodule
 
 
-module RAM256x32 #( parameter       USE_LATCH=1,
-							        WSIZE=1 ) 
+/*
+    The Main Module
+    A (BANKS x 16) x (WSIZE x 8) DFFRAM
+    for 128x32, use: WSIZE=4, BANKS=8    (512 Bytes)
+    for 256x32, use: WSIZE=4, BANKS=16   (1K Bytes)
+    for 512x32, use: WSIZE=4, BANKS=32   (2K Bytes)
+*/
+module DFFRAM  #( parameter     USE_LATCH   = 1,
+							    WSIZE       = 4,
+                                BANKS       = 8 ) 
 (
-	input   wire                    CLK,    // FO: 2
-    input   wire [WSIZE-1:0]        WE0,     // FO: 1
-    input                           EN0,     // FO: 1
-    input   wire [7:0]              A0,      // FO: 1
-    input   wire [(WSIZE*8-1):0]    Di0,     // FO: 1
-    output  wire [(WSIZE*8-1):0]    Do0
+	input   wire                        CLK,  
+    input   wire [WSIZE-1:0]            WE0,  
+    input                               EN0,  
+    input   wire [$clog2(BANKS)+3:0]    A0,   
+    input   wire [(WSIZE*8-1):0]        Di0,  
+    output  wire [(WSIZE*8-1):0]        Do0
 );
-	wire [(WSIZE*8-1):0]	Do0_pre[15:0];
-	wire [15:0]				SEL0;
-	reg  [15:0]				last_SEL0;
+	wire [(WSIZE*8-1): 0]	Do0_pre[BANKS-1: 0];
+	wire [BANKS-1: 0]       SEL0;
+	reg  [BANKS-1: 0]       last_SEL0;
 	
 	always @(posedge CLK)
 		last_SEL0 <= SEL0;
 	
 	generate
         genvar i;
-        for (i=0; i<16; i=i+1) begin : SLICE_16
-			assign	SEL0[i] = (A0[7:4] == i);
-            RAM16 #(.USE_LATCH(USE_LATCH), .WSIZE(WSIZE)) RAM16 (.CLK(CLK), .EN0(last_SEL0[i]), .WE0(WE0), .Di0(Di0), .Do0(Do0_pre[i]), .A0(A0[3:0]) );        
+        for (i=0; i<(BANKS); i=i+1) begin : SLICE_16
+			assign	SEL0[i] = (A0[$clog2(BANKS)+3:4] == i);
+            RAM16 #(.USE_LATCH(USE_LATCH), .WSIZE(WSIZE)) RAM16 (.CLK(CLK), .EN0(SEL0[i]), .WE0(WE0), .Di0(Di0), .Do0(Do0_pre[i]), .A0(A0[3:0]) );        
         end
     endgenerate
 	 
 	integer e;
     reg[(WSIZE*8-1):0]  Do;
-	always @*
-		for(e=0; e<16; e=e+1)
-			if((1<<e) == last_SEL0) 
+	always @* begin
+        Do = 'b0;
+        for(e=0; e<(BANKS); e=e+1)
+			if((1<<e) == last_SEL0) begin
 				Do = Do0_pre[e];
-    assign Do0 = Do;
-		
-endmodule
-
-module RAM128x32 #( parameter       USE_LATCH=1,
-							        WSIZE=4 ) 
-(
-	input   wire                    CLK,    // FO: 2
-    input   wire [WSIZE-1:0]        WE0,     // FO: 1
-    input                           EN0,     // FO: 1
-    input   wire [6:0]              A0,      // FO: 1
-    input   wire [(WSIZE*8-1):0]    Di0,     // FO: 1
-    output  wire [(WSIZE*8-1):0]    Do0
-);
-	wire [(WSIZE*8-1):0]	Do0_pre[7:0];
-	wire [7:0]				SEL0;
-	reg  [7:0]				last_SEL0;
-	
-	always @(posedge CLK)
-		last_SEL0 <= SEL0;
-	
-	generate
-        genvar i;
-        for (i=0; i<8; i=i+1) begin : SLICE_16
-			assign	SEL0[i] = (A0[6:4] == i);
-            RAM16 #(.USE_LATCH(USE_LATCH), .WSIZE(WSIZE)) RAM16 (.CLK(CLK), .EN0(last_SEL0[i]), .WE0(WE0), .Di0(Di0), .Do0(Do0_pre[i]), .A0(A0[3:0]) );        
-        end
-    endgenerate
-	 
-	integer e;
-    reg[(WSIZE*8-1):0]  Do;
-	always @*
-		for(e=0; e<8; e=e+1)
-			if((1<<e) == last_SEL0) 
-				Do = Do0_pre[e];
+            end
+    end
     assign Do0 = Do;
 		
 endmodule
