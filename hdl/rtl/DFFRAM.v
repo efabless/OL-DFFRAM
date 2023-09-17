@@ -40,8 +40,8 @@ module CONB (output HI, output LO);
     sky130_fd_sc_hd__conb_1 __cell__ (.HI(), .LO(LO)); 
 endmodule
 
-module EBUFN_4 (input A, input TE_B, output Z); 
-    sky130_fd_sc_hd__ebufn_4 __cell__ ( .A(A), .TE_B(TE_B), .Z(Z));
+module EBUFN_2 (input A, input TE_B, output Z); 
+    sky130_fd_sc_hd__ebufn_2 __cell__ ( .A(A), .TE_B(TE_B), .Z(Z));
 endmodule
 
 module OUTREG #(parameter WIDTH=32)

@@ -3,7 +3,7 @@ module DFFRAM_tb;
   // Parameters
   parameter USE_LATCH = 1;
   parameter WSIZE = 4;
-  parameter BANKS = 2;
+  parameter BANKS = 4;
 
   localparam    AWIDTH = $clog2(BANKS)+4;
 
@@ -11,7 +11,7 @@ module DFFRAM_tb;
   reg                       CLK;
   reg [WSIZE-1:0]           WE0;
   reg                       EN0;
-  reg [$clog2(BANKS)+3:0]   A0;
+  reg [AWIDTH-1:0]   A0;
   reg [(WSIZE*8-1):0]       Di0;
 
   // Outputs
@@ -62,6 +62,17 @@ module DFFRAM_tb;
     end
     endtask
 
+    task check;
+    input [31:0] data_read;
+    input [31:0] data_expected;
+    begin
+        if (data_read !== data_expected)
+            $display("Test failed. Expected: %h, Got: %h", data_expected, data_read);
+        else
+            $display("Test passed.");
+    end
+    endtask
+
     reg [31:0] data;
     // Test stimulus
     initial begin
@@ -71,25 +82,48 @@ module DFFRAM_tb;
     Di0 = 32'h00;
     WE0 = 4'b0;
 
-    write_word(7'h0, 32'hAA0055BB, 4'b11111);
-    write_word(7'h1, 32'hAA0055CC, 4'b11111);
-    write_word(7'h2, 32'hAA0055DD, 4'b11111);
-    read_word(7'h0, data);
-    // Check the output
-    if (data !== 32'hAA0055BB)
-        $display("Test failed. Expected: %h, Got: %h", 32'hAA0055BB, data);
-    else
-        $display("Test passed.");
-
-    write_word(7'h2, 32'h00_00_00_33, 4'b0001);
-    write_word(7'h1, 32'h00_00_33_00, 4'b0010);
-    write_word(7'h0, 32'h00_33_00_00, 4'b0100);
-
-    read_word(7'h0, data);
-    read_word(7'h1, data);
-    read_word(7'h2, data);
+    // Write and read to/from Bank0
+    write_word('h0, 32'hAA0055BB, 4'b1111);
+    write_word('h1, 32'hAA0055CC, 4'b1111);
+    write_word('h2, 32'hAA0055DD, 4'b1111);
     
+    read_word('h0, data);
+    check(data, 32'hAA0055BB);
+ 
+    write_word('h2, 32'h00_00_00_33, 4'b0001);
+    write_word('h1, 32'h00_00_33_00, 4'b0010);
+    write_word('h0, 32'h00_33_00_00, 4'b0100);
+
+    read_word('h0, data);
+    check(data, 32'haa3355bb);
     
+    read_word('h1, data);
+    check(data, 32'haa0033cc);
+    
+    read_word('h2, data);
+    check(data, 32'haa005533);
+    
+    // Write and read to/from Bank1
+    write_word('h10, 32'hAA0055BB, 4'b1111);
+    write_word('h11, 32'hAA0055CC, 4'b1111);
+    write_word('h12, 32'hAA0055DD, 4'b1111);
+    
+    read_word('h10, data);
+    check(data, 32'hAA0055BB);
+ 
+    write_word('h12, 32'h00_00_00_33, 4'b0001);
+    write_word('h11, 32'h00_00_33_00, 4'b0010);
+    write_word('h10, 32'h00_33_00_00, 4'b0100);
+
+    read_word('h10, data);
+    check(data, 32'haa3355bb);
+    
+    read_word('h11, data);
+    check(data, 32'haa0033cc);
+    
+    read_word('h12, data);
+    check(data, 32'haa005533);  
+
     #100;
 
     // Finish simulation
