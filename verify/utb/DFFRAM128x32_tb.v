@@ -30,7 +30,7 @@ module DFFRAM_tb;
 
     // Read task
     task read_word;
-    input   [WSIZE-1:0]     addr;
+    input   [AWIDTH-1:0]     addr;
     output  [(WSIZE*8-1):0] data;
     begin
         @(posedge CLK);
@@ -123,6 +123,28 @@ module DFFRAM_tb;
     
     read_word('h12, data);
     check(data, 32'haa005533);  
+
+    // Write and read to/from Bank 7
+    $display("Verifying Bank 15");
+    write_word('h70, 32'hF0F055BB, 4'b1111);
+    write_word('h71, 32'hF0F055CC, 4'b1111);
+    write_word('h72, 32'hF0F055DD, 4'b1111);
+    
+    read_word('h70, data);
+    check(data, 32'hF0F055BB);
+ 
+    write_word('h72, 32'hAB_00_00_33, 4'b0001);
+    write_word('h71, 32'hAB_00_33_00, 4'b0010);
+    write_word('h70, 32'hAB_33_00_00, 4'b0100);
+
+    read_word('h70, data);
+    check(data, 32'hF0_33_55_bb);
+    
+    read_word('h71, data);
+    check(data, 32'hF0_F0_33_cc);
+    
+    read_word('h72, data);
+    check(data, 32'hF0_F0_55_33);  
 
     #100;
 
