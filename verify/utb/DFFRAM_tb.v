@@ -30,7 +30,7 @@ module DFFRAM_tb;
 
     // Read task
     task read_word;
-    input   [WSIZE-1:0]     addr;
+    input   [AWIDTH-1:0]     addr;
     output  [(WSIZE*8-1):0] data;
     begin
         @(posedge CLK);
