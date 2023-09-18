@@ -23,6 +23,9 @@ module  CLKBUF_2  (input A, output X);
     sky130_fd_sc_hd__clkbuf_2  __cell__ (.A(A), .X(X)); 
 endmodule
 
+module CLKBUF_8 (input A, output X); 
+    sky130_fd_sc_hd__clkbuf_8 __cell__ (.A(A), .X(X));
+endmodule
 
 module CLKBUF_16 (input A, output X); 
     sky130_fd_sc_hd__clkbuf_16 __cell__ (.A(A), .X(X));
@@ -294,17 +297,27 @@ module DFFRAM  #( parameter     USE_LATCH   = 1,
 	wire [BANKS-1: 0]       SEL0;
 	reg  [BANKS-1: 0]       last_SEL0;
 	
-    wire CLK_buf;
-    (* keep *) CLKBUF_16 long_wire_repair (.X(CLK_buf), .A(CLK));
+    /* A manual clock tree
+        The root is buf_16 driving BANKS/4 buf_8 (ratio: 1(128), 1/2(256), 1/4(512))
+        buf_8 drivies 4 x buf_4 (ratio: 1/2)
+    */
     
+    wire CLK_buf;
+    wire CLK_buf_leaf[(BANKS/4)-1:0];
+    (* keep *) CLKBUF_16 long_wire_repair (.X(CLK_buf), .A(CLK));
+
 	always @(posedge CLK_buf)
 		last_SEL0 <= SEL0;
 	
 	generate
         genvar i;
         for (i=0; i<(BANKS); i=i+1) begin : SLICE_16
+            if(i%4 == 0) begin
+                (* keep *) CLKBUF_8 clk_buf_leaf (.X(CLK_buf_leaf[i/4]), .A(CLK_buf));        
+            end
 			assign	SEL0[i] = (A0[$clog2(BANKS)+3:4] == i) && EN0;
-            RAM16 #(.USE_LATCH(USE_LATCH), .WSIZE(WSIZE)) RAM16 (.CLK(CLK_buf), .EN0(SEL0[i]), .WE0(WE0), .Di0(Di0), .Do0(Do0_pre[i]), .A0(A0[3:0]) );        
+            RAM16   #(.USE_LATCH(USE_LATCH), .WSIZE(WSIZE)) 
+                    RAM16 (.CLK(CLK_buf_leaf[i/4]), .EN0(SEL0[i]), .WE0(WE0), .Di0(Di0), .Do0(Do0_pre[i]), .A0(A0[3:0]) );        
         end
     endgenerate
 	 
