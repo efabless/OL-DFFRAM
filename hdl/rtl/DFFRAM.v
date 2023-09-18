@@ -294,14 +294,17 @@ module DFFRAM  #( parameter     USE_LATCH   = 1,
 	wire [BANKS-1: 0]       SEL0;
 	reg  [BANKS-1: 0]       last_SEL0;
 	
-	always @(posedge CLK)
+    wire CLK_buf;
+    (* keep *) CLKBUF_16 long_wire_repair (.X(CLK_buf), .A(CLK));
+    
+	always @(posedge CLK_buf)
 		last_SEL0 <= SEL0;
 	
 	generate
         genvar i;
         for (i=0; i<(BANKS); i=i+1) begin : SLICE_16
-			assign	SEL0[i] = (A0[$clog2(BANKS)+3:4] == i);
-            RAM16 #(.USE_LATCH(USE_LATCH), .WSIZE(WSIZE)) RAM16 (.CLK(CLK), .EN0(SEL0[i]), .WE0(WE0), .Di0(Di0), .Do0(Do0_pre[i]), .A0(A0[3:0]) );        
+			assign	SEL0[i] = (A0[$clog2(BANKS)+3:4] == i) && EN0;
+            RAM16 #(.USE_LATCH(USE_LATCH), .WSIZE(WSIZE)) RAM16 (.CLK(CLK_buf), .EN0(SEL0[i]), .WE0(WE0), .Di0(Di0), .Do0(Do0_pre[i]), .A0(A0[3:0]) );        
         end
     endgenerate
 	 
