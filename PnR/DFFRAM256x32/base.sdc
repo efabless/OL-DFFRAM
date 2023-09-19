@@ -13,7 +13,7 @@ set_input_transition 0.5 $all_inputs_wo_clk
 set_input_delay 0.5 -clock [get_clocks $::env(CLOCK_PORT)] $all_inputs_wo_clk
 
 ## OUTPUT DELAY
-set_output_delay 24.5 -clock [get_clocks $::env(CLOCK_PORT)] [all_outputs]
+set_output_delay 24.0 -clock [get_clocks $::env(CLOCK_PORT)] [all_outputs]
 
 ## CAP LOAD
 set cap_load 0.075

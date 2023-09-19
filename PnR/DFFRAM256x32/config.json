@@ -1,8 +1,8 @@
 {
-    "DESIGN_NAME": "DFFRAM128x32",
+    "DESIGN_NAME": "DFFRAM256x32",
     "DESIGN_IS_CORE": false,
     "VERILOG_FILES": [
-        "/home/hosni/ML-SOC/OL-DFFRAM/hdl/rtl//DFFRAM128x32.v",
+        "/home/hosni/ML-SOC/OL-DFFRAM/hdl/rtl//DFFRAM256x32.v",
         "/home/hosni/ML-SOC/OL-DFFRAM/hdl/rtl//DFFRAM.v"
     ],
     "CLOCK_PERIOD": 25,
@@ -19,7 +19,7 @@
     "MAX_FANOUT_CONSTRAINT": 16,
     "FP_PDN_VPITCH": 60,
     "FP_SIZING": "relative",
-    "FP_ASPECT_RATIO": 1.0,
+    "FP_ASPECT_RATIO": 0.75,
     "FP_CORE_UTIL": 55,
     "FP_PIN_ORDER_CFG": "dir::pin_order.cfg",
     "PL_TARGET_DENSITY": 0.59,
@@ -28,14 +28,13 @@
     "PL_RESIZER_MAX_WIRE_LENGTH": 500,
     "PL_RESIZER_MAX_SLEW_MARGIN": 10,
     "CTS_CLK_MAX_WIRE_LENGTH": 500,
-    "CTS_MAX_CAP": 0.5,
     "GLB_RESIZER_MAX_SLEW_MARGIN": 10,
     "GRT_ALLOW_CONGESTION": false,
     "MAGIC_DEF_LABELS": false,
     "RUN_HEURISTIC_DIODE_INSERTION": true,
     "HEURISTIC_ANTENNA_THRESHOLD": 200,
     "GRT_REPAIR_ANTENNAS": true,
-    "GRT_ADJUSTMENT": 0.12,
+    "GRT_ADJUSTMENT": 0.16,
     "RT_MAX_LAYER": "met4",
     "DIODE_PADDING": 0,
     "VDD_NETS": [
