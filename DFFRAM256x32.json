@@ -26,7 +26,7 @@
         "technology": "sky130",
         "clock_freq_mhz": "40",
         "supply_voltage": [
-            "n/a"
+            "1.8"
         ]
     }
 }
