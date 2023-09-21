@@ -19,10 +19,10 @@
             "AHBL"
         ],
         "type": "hard",
-        "status": "",
+        "status": "verified",
         "cell_count": "0",
-        "width": "552.580",
-        "height": "563.300",
+        "width": "896.245",
+        "height": "685.665",
         "technology": "sky130",
         "clock_freq_mhz": "40",
         "supply_voltage": [
