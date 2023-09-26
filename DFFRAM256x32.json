@@ -21,8 +21,8 @@
         "type": "hard",
         "status": "verified",
         "cell_count": "0",
-        "width": "896.245",
-        "height": "685.665",
+        "width": "1153.835",
+        "height": "536.015",
         "technology": "sky130",
         "clock_freq_mhz": "40",
         "supply_voltage": [
