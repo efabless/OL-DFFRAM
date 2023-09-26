@@ -1,5 +1,5 @@
 /*
- * RAM.v
+ * DFFRAM.v
  *
  * A configurable DFFRAM Netlist to be hardened by OpenLane
  *
@@ -17,6 +17,9 @@
  * For further information, please visit .
  *
  */
+
+ `timescale 1ns/1ps
+ 
 `default_nettype        none
 
 module  CLKBUF_2  (input A, output X); 
@@ -301,7 +304,7 @@ module DFFRAM  #( parameter     USE_LATCH   = 1,
         The root is buf_16 driving BANKS/4 buf_8 (ratio: 1(128), 1/2(256), 1/4(512))
         buf_8 drivies 4 x buf_4 (ratio: 1/2)
     */
-    
+
     wire CLK_buf;
     wire CLK_buf_leaf[(BANKS/4)-1:0];
     (* keep *) CLKBUF_16 long_wire_repair (.X(CLK_buf), .A(CLK));

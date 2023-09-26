@@ -1,3 +1,4 @@
 a.out
 *.vcd
 *.vvp
+.DS_Store
