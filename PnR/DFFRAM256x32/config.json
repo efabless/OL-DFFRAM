@@ -5,7 +5,7 @@
         "/home/hosni/ML-SOC/OL-DFFRAM/hdl/rtl//DFFRAM256x32.v",
         "/home/hosni/ML-SOC/OL-DFFRAM/hdl/rtl//DFFRAM.v"
     ],
-    "CLOCK_PERIOD": 25,
+    "CLOCK_PERIOD": 20,
     "RUN_CTS": 0,
     "ROUTING_CORES": 12,
     "SYNTH_READ_BLACKBOX_LIB": 1,
@@ -19,7 +19,7 @@
     "MAX_FANOUT_CONSTRAINT": 16,
     "FP_PDN_VPITCH": 60,
     "FP_SIZING": "relative",
-    "FP_ASPECT_RATIO": 0.75,
+    "FP_ASPECT_RATIO": 0.45,
     "FP_CORE_UTIL": 55,
     "FP_PIN_ORDER_CFG": "dir::pin_order.cfg",
     "PL_TARGET_DENSITY": 0.59,
