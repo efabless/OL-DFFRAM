@@ -124,27 +124,29 @@ module DFFRAM128x32_tb;
         WE0 = 4'b0;
 
         // Write and read to/from Bank0
-        write_word('h0, 32'hAA0055BB, 4'b1111);
-        write_word('h1, 32'hAA0055CC, 4'b1111);
-        write_word('h2, 32'hAA0055DD, 4'b1111);
+        $display("\n+++Verifying Bank 0+++");
+        write_word('h0, 32'h110055BB, 4'b1111);
+        write_word('h1, 32'h110055CC, 4'b1111);
+        write_word('h2, 32'h110055DD, 4'b1111);
         
         read_word('h0, data);
-        check(data, 32'hAA0055BB);
+        check(data, 32'h110055BB);
     
         write_word('h2, 32'h00_00_00_33, 4'b0001);
         write_word('h1, 32'h00_00_33_00, 4'b0010);
         write_word('h0, 32'h00_33_00_00, 4'b0100);
 
         read_word('h0, data);
-        check(data, 32'haa3355bb);
+        check(data, 32'h113355bb);
         
         read_word('h1, data);
-        check(data, 32'haa0033cc);
+        check(data, 32'h110033cc);
         
         read_word('h2, data);
-        check(data, 32'haa005533);
+        check(data, 32'h11005533);
         
         // Write and read to/from Bank1
+        $display("\n+++Verifying Bank 1+++");
         write_word('h10, 32'hAA0055BB, 4'b1111);
         write_word('h11, 32'hAA0055CC, 4'b1111);
         write_word('h12, 32'hAA0055DD, 4'b1111);
@@ -166,7 +168,7 @@ module DFFRAM128x32_tb;
         check(data, 32'haa005533);  
 
         // Write and read to/from Bank 7
-        $display("Verifying Bank 15");
+        $display("\n+++Verifying Bank 7+++");
         write_word('h70, 32'hF0F055BB, 4'b1111);
         write_word('h71, 32'hF0F055CC, 4'b1111);
         write_word('h72, 32'hF0F055DD, 4'b1111);

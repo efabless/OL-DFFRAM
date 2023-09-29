@@ -1,7 +1,7 @@
 /*
  * DFFRAM256x32_tb.v
  *
- * A testbench for DFFRAM128x32 macro
+ * A testbench for DFFRAM512x32 macro
  *
  * This is free software: you can redistribute it and/or modify
  * it under the terms of the Apache License, Version 2.0 (the "License").
@@ -22,12 +22,12 @@
  
  `default_nettype        none
 
-module DFFRAM256x32_tb;
+module DFFRAM512x32_tb;
 
   // Parameters
   parameter USE_LATCH = 1;
   parameter WSIZE = 4;
-  parameter BANKS = 16;
+  parameter BANKS = 32;
 
   localparam    AWIDTH = $clog2(BANKS)+4;
 
@@ -46,7 +46,7 @@ module DFFRAM256x32_tb;
   reg VPWR;
 
   // Instantiate the module under test
-    DFFRAM256x32 muv (
+    DFFRAM512x32 muv (
 `ifdef USE_POWER_PINS  
           .VPWR(VPWR),
           .VGND(VGND), 
@@ -60,7 +60,7 @@ module DFFRAM256x32_tb;
     );
 
     initial begin
-        $dumpfile("DFFRAM256x32_tb.vcd");
+        $dumpfile("DFFRAM512x32_tb.vcd");
         $dumpvars;
     end
     // Clock generation - 50MHz
@@ -204,6 +204,27 @@ module DFFRAM256x32_tb;
         read_word('hf2, data);
         check(data, 32'hF0_F0_55_33);  
         
+        // Write and read to/from Bank 31
+        $display("\n+++Verifying Bank 31+++");
+        write_word('h1f0, 32'hF0F055BB, 4'b1111);
+        write_word('h1f1, 32'hF0F055CC, 4'b1111);
+        write_word('h1f2, 32'hF0F055DD, 4'b1111);
+        
+        read_word('h1f0, data);
+        check(data, 32'hF0F055BB);
+    
+        write_word('h1f2, 32'hAB_00_00_33, 4'b0001);
+        write_word('h1f1, 32'hAB_00_33_00, 4'b0010);
+        write_word('h1f0, 32'hAB_33_00_00, 4'b0100);
+
+        read_word('h1f0, data);
+        check(data, 32'hF0_33_55_bb);
+        
+        read_word('h1f1, data);
+        check(data, 32'hF0_F0_33_cc);
+        
+        read_word('h1f2, data);
+        check(data, 32'hF0_F0_55_33);  
         #100;
 
         // Finish simulation
