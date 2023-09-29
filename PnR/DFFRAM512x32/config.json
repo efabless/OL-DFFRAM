@@ -45,6 +45,5 @@
     ],
     "PNR_SDC_FILE": "dir::base.sdc",
     "SIGNOFF_SDC_FILE": "dir::signoff.sdc",
-    "RUN_CVC": true,
-    dont touch RAM16
+    "RUN_CVC": true
 }
