@@ -41,7 +41,7 @@
         "VPWR"
     ],
     "GND_NETS": [
-        "VNGD"
+        "VGND"
     ],
     "PNR_SDC_FILE": "dir::base.sdc",
     "SIGNOFF_SDC_FILE": "dir::signoff.sdc",
