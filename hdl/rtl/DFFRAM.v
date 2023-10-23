@@ -53,17 +53,23 @@ endmodule
 module OUTREG #(parameter WIDTH=32)
 (
     input   wire                CLK,        // FO: 8
+    input   wire                EN,
     input   wire [WIDTH-1:0]    Di,         
-    output  wire [WIDTH-1:0]    Do  
+    output  wire [WIDTH-1:0]    Do
+
 );
     localparam BYTE_CNT = WIDTH / 8;
 
     wire [BYTE_CNT-1:0] CLKBUF;
+    wire [BYTE_CNT-1:0] GCLK;
+    
     wire CLK_buf;
     
     sky130_fd_sc_hd__clkbuf_4 Root_CLKBUF (.X(CLK_buf), .A(CLK));
     sky130_fd_sc_hd__clkbuf_4 Do_CLKBUF [BYTE_CNT-1:0] (.X(CLKBUF), .A(CLK_buf) );
     
+    sky130_fd_sc_hd__dlclkp_4 CG [BYTE_CNT-1:0] ( .CLK(CLKBUF), .GCLK(GCLK), .GATE(EN) );
+
     generate
         genvar i;
         for(i=0; i<BYTE_CNT; i=i+1) begin : OUTREG_BYTE
@@ -71,7 +77,7 @@ module OUTREG #(parameter WIDTH=32)
                 (* keep = "true" *)
                 sky130_fd_sc_hd__diode_2 DIODE [7:0] (.DIODE(Di[(i+1)*8-1:i*8]));
             `endif
-            sky130_fd_sc_hd__dfxtp_1 Do_FF [7:0] ( .D(Di[(i+1)*8-1:i*8]), .Q(Do[(i+1)*8-1:i*8]), .CLK(CLKBUF[i]) );
+            sky130_fd_sc_hd__dfxtp_1 Do_FF [7:0] ( .D(Di[(i+1)*8-1:i*8]), .Q(Do[(i+1)*8-1:i*8]), .CLK(GCLK[i]) );
         end
     endgenerate
 endmodule
@@ -273,7 +279,7 @@ module RAM16 #( parameter   USE_LATCH=1,
         end
     endgenerate
 
-    OUTREG #(.WIDTH(WSIZE*8)) Do0_REG ( .CLK(CLK_buf), .Di(Do0_pre), .Do(Do0) );
+    OUTREG #(.WIDTH(WSIZE*8)) Do0_REG ( .CLK(CLK_buf), .EN(EN0_buf), .Di(Do0_pre), .Do(Do0) );
 
 endmodule
 
@@ -310,7 +316,8 @@ module DFFRAM  #( parameter     USE_LATCH   = 1,
     (* keep *) CLKBUF_16 long_wire_repair (.X(CLK_buf), .A(CLK));
 
 	always @(posedge CLK_buf)
-		last_SEL0 <= SEL0;
+        if(EN0)
+		    last_SEL0 <= SEL0;
 	
 	generate
         genvar i;
