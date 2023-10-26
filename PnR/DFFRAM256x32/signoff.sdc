@@ -10,10 +10,11 @@ set clk_input [get_port $::env(CLOCK_PORT)]
 set clk_indx [lsearch [all_inputs] $clk_input]
 set all_inputs_wo_clk [lreplace [all_inputs] $clk_indx $clk_indx ""]
 set_input_transition 0.5 $all_inputs_wo_clk
-set_input_delay 1.0 -clock [get_clocks $::env(CLOCK_PORT)] $all_inputs_wo_clk
+set_input_delay -min 2.5 -clock [get_clocks $::env(CLOCK_PORT)] $all_inputs_wo_clk
+set_input_delay -max 6.0 -clock [get_clocks $::env(CLOCK_PORT)] $all_inputs_wo_clk
 
 ## OUTPUT DELAY
-set_output_delay 16.0 -clock [get_clocks $::env(CLOCK_PORT)] [all_outputs]
+set_output_delay 10.0 -clock [get_clocks $::env(CLOCK_PORT)] [all_outputs]
 
 ## CAP LOAD
 set cap_load 0.075
