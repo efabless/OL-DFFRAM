@@ -32,7 +32,7 @@ The DFFRAM adheres to the SRAM read/write operation. The following timing diagra
 
 Make sure that you have IPM installed locally, to install IPM please [follow the instructions in IPM's repo](https://github.com/efabless/IPM)
 
-After making sure that IPM is installed, you can install DFFRAM using this commands:
+After making sure that IPM is installed, you can install DFFRAM using:
 
 ```
     ipm install DFFRAM<size>
