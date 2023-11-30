@@ -17,3 +17,35 @@ The DFFRAM adheres to the SRAM read/write operation. The following timing diagra
 |T<sub>2</sub> (min)| 9.6186 ns | 8.6898 ns     | 8.4561 ns     |
 |T<sub>3</sub> (min)| 6.7498 ns | 4.7148 ns     | 3.7977 ns     |
 |T<sub>4</sub> (max)| 7.7625 ns | 11.2799 ns    | 17.4558 ns    |
+
+## DFFRAM dimensions
+|IP                 |W(um)      |L(um)          |
+|-------------------|-----------|---------------|
+|DFRAM128x32        |553.890    |564.610        |
+|DFRAM256x32        |1153.835   |536.015        |
+|DFRAM512x32        |1186.960   |1021.295       |
+
+
+## Installation
+
+### To install OL-DFFRAM via IPM (recommended)
+
+Make sure that you have IPM installed locally, to install IPM please [follow the instructions in IPM's repo](https://github.com/efabless/IPM)
+
+After making sure that IPM is installed, you can install DFFRAM using this commands:
+
+```
+    ipm install DFFRAM<size>
+
+    #For example
+    ipm install DFFRAM256x32
+```
+
+### To install OL-DFFRAM manually (not recommended)
+
+Clone the OL-DFFRAM repo and use it inside your project
+
+```
+    cd <your_project_root>
+    git clone https://github.com/efabless/OL-DFFRAM.git
+```
