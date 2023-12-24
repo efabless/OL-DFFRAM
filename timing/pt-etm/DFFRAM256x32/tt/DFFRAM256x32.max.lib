@@ -4,7 +4,7 @@ library("DFFRAM256x32.max") {
   technology (cmos) ;
   delay_model : table_lookup ;
   library_features ( report_delay_calculation ) ;
-  date : "Wed Oct 25 01:20:25 2023" ;
+  date : "Sun Dec 24 07:50:34 2023" ;
   revision : "U-2022.12-SP5" ;
   nom_process : 1.0000 ;
   nom_voltage : 1.8000 ;
@@ -388,13 +388,11 @@ pin("EN0") {
 
 pin("VGND") {
 	direction : input ;
-	max_transition : 0.500000 ;
 	capacitance : 0.000000 ;
 } /* end of pin VGND */
 
 pin("VPWR") {
 	direction : input ;
-	max_transition : 0.500000 ;
 	capacitance : 0.000000 ;
 } /* end of pin VPWR */
 bus ( A0 ) {
