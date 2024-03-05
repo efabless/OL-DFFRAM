@@ -111,6 +111,7 @@ module DFFRAM512x32_tb;
     end
     endtask
 
+    integer i;
     reg [31:0] data;
     // Test stimulus
     initial begin
@@ -226,6 +227,18 @@ module DFFRAM512x32_tb;
         read_word('h1f2, data);
         check(data, 32'hF0_F0_55_33);  
         #100;
+
+        // Writing to all memory words
+        $display("\n+++Writing to all memory words+++");
+        for (i = 0; i < 512; i = i + 1) begin
+            write_word(i, ((i << 22) | i | ((i+7) << 10)), 4'b1111);
+        end
+        // Read all memory words
+        $display("\n+++Reading all memory words+++");
+        for (i = 0; i < 512; i = i + 1) begin
+            read_word(i, data);
+            check(data, ((i << 22) | i | ((i+7) << 10)));
+        end
 
         // Finish simulation
         $finish;
