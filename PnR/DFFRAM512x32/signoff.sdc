@@ -10,20 +10,19 @@ set clk_input [get_port $::env(CLOCK_PORT)]
 set clk_indx [lsearch [all_inputs] $clk_input]
 set all_inputs_wo_clk [lreplace [all_inputs] $clk_indx $clk_indx ""]
 set_input_transition 0.5 $all_inputs_wo_clk
-set_input_delay 1.5 -clock [get_clocks $::env(CLOCK_PORT)] $all_inputs_wo_clk
+set_input_delay -min 2.5 -clock [get_clocks $::env(CLOCK_PORT)] $all_inputs_wo_clk
+set_input_delay -max 5 -clock [get_clocks $::env(CLOCK_PORT)] $all_inputs_wo_clk
 
 ## OUTPUT DELAY
-set_output_delay 9.0 -clock [get_clocks $::env(CLOCK_PORT)] [all_outputs]
+set_output_delay 15.0 -clock [get_clocks $::env(CLOCK_PORT)] [all_outputs]
 
 ## CAP LOAD
 set cap_load 0.075
-puts "\[INFO\]: Setting load to: $cap_load"
 set_load $cap_load [all_outputs]
 
 ## MAX TRANS
 set_max_trans 1.5 [current_design]
 
 ## DERATES
-puts "\[INFO\]: Setting timing derate to: [expr {$::env(SYNTH_TIMING_DERATE) * 10}] %"
 set_timing_derate -early 0.95
 set_timing_derate -late 1.05

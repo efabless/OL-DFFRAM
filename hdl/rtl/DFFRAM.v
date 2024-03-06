@@ -365,7 +365,7 @@ module RAM16 #( parameter   USE_LATCH=1,
 
     OUTREG #(.WIDTH(WSIZE*8)) Do0_REG ( .CLK(CLK_buf), .EN(EN0_buf), .Di(Do0_pre), .Do(Do0_pre_buf) );
 
-    sky130_fd_sc_hd__clkbuf_8 OUTBUF [31:0] (.X(Do0), .A(Do0_pre_buf));
+    sky130_fd_sc_hd__clkbuf_8 OUTBUF [(WSIZE*8-1):0] (.X(Do0), .A(Do0_pre_buf));
 
 endmodule
 
@@ -510,7 +510,7 @@ module _DFFRAM32_  #( parameter     USE_LATCH   = 1,
 	wire [(WSIZE*8-1): 0]	Do0_pre[BANKS-1: 0];
     wire                    Do0_mux[7:0];
 
-	wire [BANKS-1: 0]       SEL0;
+	wire [BANKS-1: 0]       SEL0, SEL0_buf;
 	reg  [BANKS-1: 0]       last_SEL0;
 
     reg [8:0] last_A;
@@ -541,8 +541,9 @@ module _DFFRAM32_  #( parameter     USE_LATCH   = 1,
                 (* keep *) CLKBUF_8 clk_buf_leaf (.X(CLK_buf_leaf[i/4]), .A(CLK_buf));        
             end
 			assign	SEL0[i] = (A0[$clog2(BANKS)+3:4] == i) && EN0;
+            (* keep *) CLKBUF_4 SEL0BUF (.X(SEL0_buf[i]), .A(SEL0[i]));
             RAM16   #(.USE_LATCH(USE_LATCH), .WSIZE(WSIZE)) 
-                    RAM16 (.CLK(CLK_buf_leaf[i/4]), .EN0(SEL0[i]), .WE0(WE0), .Di0(Di0), .Do0(Do0_pre[i]), .A0(A0[3:0]) );        
+                    RAM16 (.CLK(CLK_buf_leaf[i/4]), .EN0(SEL0_buf[i]), .WE0(WE0), .Di0(Di0), .Do0(Do0_pre[i]), .A0(A0[3:0]) );        
         end
     endgenerate
 	 

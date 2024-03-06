@@ -31,7 +31,7 @@ module DFFRAM512x32  (
     output  wire [31:0]     Do0
 );
 
-    DFFRAM  #( .USE_LATCH(1), .WSIZE(4), .BANKS(32) ) RAM (
+    _DFFRAM32_  #( .USE_LATCH(1), .WSIZE(4), .BANKS(32) ) RAM (
 	    .CLK(CLK),  
         .WE0(WE0),  
         .EN0(EN0),  
