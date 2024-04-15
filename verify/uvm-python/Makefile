@@ -43,7 +43,7 @@ SIM_PATH := $(PWD)/sim/$(SIM_TAG)
 
 clone_ef_uvm := $(shell if [ ! -d "EF_UVM" ]; then \
 	echo "Cloning the EF_UVM repository..."; \
-	git clone https://github.com/efabless/EF_UVM.git -b reset_pipe; \
+	git clone https://github.com/efabless/EF_UVM.git; \
 fi;)
 
 
