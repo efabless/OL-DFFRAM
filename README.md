@@ -13,10 +13,10 @@ The DFFRAM adheres to the SRAM read/write operation. The following timing diagra
 |Parameters         |DFRAM128x32|DFFRAM256x32   |DFFRAM512x32   |
 |-------------------|-----------|---------------|---------------|
 |T<sub>C</sub> (min)| 25 ns     | 25 ns         | 25 ns         |
-|T<sub>1</sub> (min)| 6.8303 ns | 4.7618 ns     | 3.2919 ns     |
-|T<sub>2</sub> (min)| 9.6186 ns | 8.6898 ns     | 8.4561 ns     |
-|T<sub>3</sub> (min)| 6.7498 ns | 4.7148 ns     | 3.7977 ns     |
-|T<sub>4</sub> (max)| 7.7625 ns | 11.2799 ns    | 17.4558 ns    |
+|T<sub>1</sub> (min)| 6.8303 ns | 8.5061 ns     | 6.425 ns      |
+|T<sub>2</sub> (min)| 9.6186 ns | 8.5881 ns     | 8.3642 ns     |
+|T<sub>3</sub> (min)| 6.7497 ns | 6.3386 ns     | 4.1659 ns     |
+|T<sub>4</sub> (max)| 7.7625 ns | 14.4169 ns    | 9.9347 ns     |
 
 ## DFFRAM dimensions
 |IP                 |W(um)      |L(um)          |
